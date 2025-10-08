@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity';
 
 export const DIGITAL_ART_QUERY = groq`
-  *[_type == "digitalArt"] | order(dateOfCreation desc, _createdAt desc) {
+  *[_type == "digitalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) {
     _id,
     title,
     description,
@@ -29,7 +29,7 @@ export const DIGITAL_ART_QUERY = groq`
 `;
 
 export const TRADITIONAL_ART_QUERY = groq`
-  *[_type == "traditionalArt"] | order(dateOfCreation desc, _createdAt desc) {
+  *[_type == "traditionalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) {
     _id,
     title,
     description,
