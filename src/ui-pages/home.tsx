@@ -5,6 +5,9 @@ import type { DigitalArt, TraditionalArt } from '@/types/sketch';
 import { MasonryGrid } from '@/components/MasonryGrid';
 import { SketchCard } from '@/components/SketchCard';
 import { ImageModal } from '@/components/ImageModal';
+import { cn } from '@/lib/utils';
+
+type TabType = 'digital' | 'traditional';
 
 interface HomePageProps {
   digitalArt: DigitalArt[];
@@ -12,6 +15,7 @@ interface HomePageProps {
 }
 
 export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
+  const [activeTab, setActiveTab] = useState<TabType>('digital');
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     sketch: DigitalArt | TraditionalArt | null;
@@ -42,43 +46,57 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
     }
   };
 
+  const currentSketches = activeTab === 'digital' ? digitalArt : traditionalArt;
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto space-y-16 px-4 py-12">
-        {/* Digital Art Section */}
-        <section>
-          <div className="mb-8">
-            <h2 className="mb-2 text-3xl font-bold">Digital Art</h2>
-          </div>
+      <div className="container mx-auto px-4 py-12">
+        {/* Tab Buttons */}
+        <div className="mb-8 flex items-center gap-4 border-b border-border">
+          <button
+            onClick={() => setActiveTab('digital')}
+            className={cn(
+              'relative pb-4 text-lg font-semibold transition-colors',
+              activeTab === 'digital'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            )}
+          >
+            Digital Art
+            {activeTab === 'digital' && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
 
-          {digitalArt.length > 0 ? (
+          <button
+            onClick={() => setActiveTab('traditional')}
+            className={cn(
+              'relative pb-4 text-lg font-semibold transition-colors',
+              activeTab === 'traditional'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            )}
+          >
+            Traditional Art
+            {activeTab === 'traditional' && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
+        </div>
+
+        {/* Gallery Section */}
+        <section>
+          {currentSketches.length > 0 ? (
             <MasonryGrid>
-              {digitalArt.map((sketch) => (
+              {currentSketches.map((sketch) => (
                 <SketchCard key={sketch._id} sketch={sketch} onClick={() => openModal(sketch)} />
               ))}
             </MasonryGrid>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-12 text-center">
-              <p className="text-muted-foreground">No digital art pieces yet</p>
-            </div>
-          )}
-        </section>
-
-        {/* Traditional Art Section */}
-        <section>
-          <div className="mb-8">
-            <h2 className="mb-2 text-3xl font-bold">Traditional Art</h2>
-          </div>
-
-          {traditionalArt.length > 0 ? (
-            <MasonryGrid>
-              {traditionalArt.map((sketch) => (
-                <SketchCard key={sketch._id} sketch={sketch} onClick={() => openModal(sketch)} />
-              ))}
-            </MasonryGrid>
-          ) : (
-            <div className="rounded-lg border border-dashed border-border p-12 text-center">
-              <p className="text-muted-foreground">No traditional art pieces yet</p>
+              <p className="text-muted-foreground">
+                No {activeTab === 'digital' ? 'digital' : 'traditional'} art pieces yet
+              </p>
             </div>
           )}
         </section>
