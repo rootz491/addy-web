@@ -52,36 +52,38 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         {/* Tab Buttons */}
-        <div className="mb-8 flex items-center gap-4 border-b border-border">
-          <button
-            onClick={() => setActiveTab('digital')}
-            className={cn(
-              'relative pb-4 text-lg font-semibold transition-colors',
-              activeTab === 'digital'
-                ? 'text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            Digital Art
-            {activeTab === 'digital' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-            )}
-          </button>
+        <div className="mb-12 flex justify-center">
+          <div className="inline-flex items-center gap-8 border-b-2 border-border">
+            <button
+              onClick={() => setActiveTab('digital')}
+              className={cn(
+                'relative pb-3 text-2xl font-bold transition-colors',
+                activeTab === 'digital'
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              Digital Art
+              {activeTab === 'digital' && (
+                <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
+              )}
+            </button>
 
-          <button
-            onClick={() => setActiveTab('traditional')}
-            className={cn(
-              'relative pb-4 text-lg font-semibold transition-colors',
-              activeTab === 'traditional'
-                ? 'text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            Traditional Art
-            {activeTab === 'traditional' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-            )}
-          </button>
+            <button
+              onClick={() => setActiveTab('traditional')}
+              className={cn(
+                'relative pb-3 text-2xl font-bold transition-colors',
+                activeTab === 'traditional'
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              Traditional Art
+              {activeTab === 'traditional' && (
+                <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Gallery Section */}
