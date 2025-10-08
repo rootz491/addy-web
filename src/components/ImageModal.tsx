@@ -45,6 +45,15 @@ export function ImageModal({
   const currentImage = sketch.images[currentImageIndex];
   const hasMultipleImages = sketch.images.length > 1;
 
+  // Check if there's any metadata to display
+  const hasMetadata =
+    sketch.title ||
+    sketch.description ||
+    sketch.featured ||
+    sketch.dateOfCreation ||
+    (sketch.categories && sketch.categories.length > 0) ||
+    (sketch.orderable && sketch.price && sketch.currency);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -55,7 +64,7 @@ export function ImageModal({
 
       {/* Modal content */}
       <div
-        className="relative z-10 max-h-[90vh] w-full max-w-6xl overflow-y-auto rounded-lg bg-background shadow-2xl"
+        className="relative z-10 max-h-[90vh] w-full max-w-7xl overflow-y-auto rounded-lg bg-background shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -67,16 +76,16 @@ export function ImageModal({
           <X className="h-6 w-6" />
         </button>
 
-        <div className="grid gap-6 p-6 md:grid-cols-2">
+        <div className={`grid gap-6 p-6 ${hasMetadata ? 'md:grid-cols-[2fr_1fr]' : ''}`}>
           {/* Image section */}
           <div className="relative">
-            <div className="relative aspect-square overflow-hidden rounded-lg bg-muted">
+            <div className={`relative overflow-hidden rounded-lg bg-muted ${hasMetadata ? 'aspect-square' : 'aspect-[4/3]'}`}>
               <Image
                 src={currentImage.asset.url}
                 alt={currentImage.alt || sketch.title || 'Sketch'}
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes={hasMetadata ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 100vw, 90vw'}
                 priority
               />
             </div>
@@ -137,83 +146,86 @@ export function ImageModal({
             )}
           </div>
 
-          {/* Info section */}
-          <div className="space-y-6">
-            {sketch.title && (
-              <div>
-                <h2 className="text-3xl font-bold">{sketch.title}</h2>
-                {sketch.featured && (
-                  <span className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                    ⭐ Featured
-                  </span>
+          {/* Info section - only show if there's metadata */}
+          {hasMetadata && (
+            <div className="space-y-6">
+              {sketch.title && (
+                <div>
+                  <h2 className="text-3xl font-bold">{sketch.title}</h2>
+                  {sketch.featured && (
+                    <span className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                      ⭐ Featured
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {sketch.description && (
+                <div>
+                  <h3 className="mb-2 font-semibold">Description</h3>
+                  <p className="text-muted-foreground">{sketch.description}</p>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {sketch.dateOfCreation && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium">Created:</span>
+                    <span className="text-muted-foreground">
+                      {new Date(sketch.dateOfCreation).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                )}
+
+                {sketch.categories && sketch.categories.length > 0 && (
+                  <div className="flex items-start gap-2 text-sm">
+                    <Tag className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <div>
+                      <span className="font-medium">Categories:</span>
+                      <div className="mt-1 flex flex-wrap gap-2">
+                        {sketch.categories.map((category) => (
+                          <span
+                            key={category}
+                            className="rounded-md bg-secondary px-2 py-1 text-xs"
+                          >
+                            {category}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {sketch.orderable && sketch.price && sketch.currency && (
+                  <div className="rounded-lg border border-border bg-muted/50 p-4">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Available for purchase
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {sketch.currency === 'USD' && '$'}
+                          {sketch.currency === 'EUR' && '€'}
+                          {sketch.currency === 'GBP' && '£'}
+                          {sketch.currency === 'JPY' && '¥'}
+                          {sketch.currency === 'INR' && '₹'}
+                          {!['USD', 'EUR', 'GBP', 'JPY', 'INR'].includes(sketch.currency || '') &&
+                            sketch.currency + ' '}
+                          {sketch.price.toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
-            )}
-
-            {sketch.description && (
-              <div>
-                <h3 className="mb-2 font-semibold">Description</h3>
-                <p className="text-muted-foreground">{sketch.description}</p>
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {sketch.dateOfCreation && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">Created:</span>
-                  <span className="text-muted-foreground">
-                    {new Date(sketch.dateOfCreation).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </div>
-              )}
-
-              {sketch.categories && sketch.categories.length > 0 && (
-                <div className="flex items-start gap-2 text-sm">
-                  <Tag className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                  <div>
-                    <span className="font-medium">Categories:</span>
-                    <div className="mt-1 flex flex-wrap gap-2">
-                      {sketch.categories.map((category) => (
-                        <span
-                          key={category}
-                          className="rounded-md bg-secondary px-2 py-1 text-xs"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {sketch.orderable && sketch.price && sketch.currency && (
-                <div className="rounded-lg border border-border bg-muted/50 p-4">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Available for purchase
-                      </p>
-                      <p className="text-2xl font-bold">
-                        {sketch.currency === 'USD' && '$'}
-                        {sketch.currency === 'EUR' && '€'}
-                        {sketch.currency === 'GBP' && '£'}
-                        {sketch.currency === 'JPY' && '¥'}
-                        {sketch.currency === 'INR' && '₹'}
-                        {!['USD', 'EUR', 'GBP', 'JPY', 'INR'].includes(sketch.currency || '') && sketch.currency + ' '}
-                        {sketch.price.toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

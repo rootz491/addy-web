@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Calendar, Tag, DollarSign } from 'lucide-react';
+import { Tag, DollarSign } from 'lucide-react';
 import type { BaseSketch } from '@/types/sketch';
 
 interface SketchCardProps {
@@ -49,25 +49,13 @@ export function SketchCard({ sketch, onClick }: SketchCardProps) {
       </div>
 
       {/* Info section */}
-      {(sketch.title || sketch.dateOfCreation || sketch.categories || sketch.price) && (
+      {(sketch.title || sketch.categories || sketch.price) && (
         <div className="space-y-2 p-3">
           {sketch.title && (
             <h3 className="line-clamp-2 font-semibold leading-tight">{sketch.title}</h3>
           )}
 
           <div className="space-y-1 text-xs text-muted-foreground">
-            {sketch.dateOfCreation && (
-              <div className="flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
-                <span>
-                  {new Date(sketch.dateOfCreation).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                  })}
-                </span>
-              </div>
-            )}
-
             {sketch.categories && sketch.categories.length > 0 && (
               <div className="flex items-center gap-1">
                 <Tag className="h-3 w-3" />
