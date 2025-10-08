@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { Instagram, Mail } from 'lucide-react';
 import contactData from '@/config/contact.json';
 
-// Reddit icon component
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 24 24"
@@ -38,7 +37,6 @@ interface AboutPageProps {
 export function AboutPage({ artistImage }: AboutPageProps) {
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section with Image */}
       <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden bg-gradient-to-b from-muted to-background">
         {artistImage ? (
           <Image
@@ -56,7 +54,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         
-        {/* Title Overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
             <h1 className="mb-4 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
@@ -69,10 +66,8 @@ export function AboutPage({ artistImage }: AboutPageProps) {
         </div>
       </section>
 
-      {/* Content Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="mx-auto max-w-3xl space-y-8">
-          {/* Introduction */}
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">Welcome to My Creative World</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -83,7 +78,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
             </p>
           </div>
 
-          {/* Background */}
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">The Journey</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -100,7 +94,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
             </p>
           </div>
 
-          {/* Inspiration */}
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">Inspirations & Style</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -118,7 +111,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
             </p>
           </div>
 
-          {/* Philosophy */}
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">My Artistic Philosophy</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -135,7 +127,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
             </p>
           </div>
 
-          {/* Closing */}
           <div className="space-y-4 border-t border-border pt-8">
             <h2 className="text-3xl font-bold">Thank You for Visiting</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -147,7 +138,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
             </p>
           </div>
 
-          {/* Contact Section */}
           <div className="space-y-6 rounded-lg border border-border bg-muted/50 p-8">
             <h2 className="text-3xl font-bold">Get in Touch</h2>
             <p className="text-lg text-muted-foreground">
@@ -171,7 +161,6 @@ export function AboutPage({ artistImage }: AboutPageProps) {
                 );
               })}
               
-              {/* Email */}
               <a
                 href={`mailto:${contactData.email}`}
                 className="flex items-center gap-3 rounded-lg bg-background px-4 py-3 transition-colors hover:bg-primary hover:text-primary-foreground"

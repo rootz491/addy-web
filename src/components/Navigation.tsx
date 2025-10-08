@@ -6,7 +6,6 @@ import { Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import contactData from '@/config/contact.json';
 
-// Reddit icon component
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 24 24"

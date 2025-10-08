@@ -51,7 +51,6 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
-        {/* Tab Buttons */}
         <div className="mb-12 flex justify-center">
           <div className="inline-flex items-center gap-8 border-b-2 border-border">
             <button
@@ -86,7 +85,6 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
           </div>
         </div>
 
-        {/* Gallery Section */}
         <section>
           {currentSketches.length > 0 ? (
             <MasonryGrid>
@@ -104,7 +102,6 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
         </section>
       </div>
 
-      {/* Image Modal */}
       {modalState.sketch && (
         <ImageModal
           isOpen={modalState.isOpen}

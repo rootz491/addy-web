@@ -3,7 +3,6 @@
 import { Instagram, Mail } from 'lucide-react';
 import contactData from '@/config/contact.json';
 
-// Reddit icon component (not in lucide-react by default)
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 24 24"
@@ -31,14 +30,12 @@ export function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          {/* Brand */}
           <div className="text-center md:text-left">
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} {contactData.name}. All rights reserved.
             </p>
           </div>
 
-          {/* Social Links */}
           <div className="flex items-center gap-4">
             {contactData.socials.map((social) => {
               const Icon = getIcon(social.icon);
@@ -56,7 +53,6 @@ export function Footer() {
               );
             })}
             
-            {/* Email */}
             <a
               href={`mailto:${contactData.email}`}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"

@@ -1,4 +1,3 @@
-// Shared types for both Digital and Traditional Art
 export interface ImageAsset {
   _id: string;
   url: string;

@@ -45,7 +45,6 @@ export function ImageModal({
   const currentImage = sketch.images[currentImageIndex];
   const hasMultipleImages = sketch.images.length > 1;
 
-  // Check if there's any metadata to display
   const hasMetadata =
     sketch.title ||
     sketch.description ||
@@ -59,15 +58,12 @@ export function ImageModal({
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
-      {/* Blur backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
 
-      {/* Modal content */}
       <div
         className="relative z-10 max-h-[90vh] w-full max-w-7xl overflow-y-auto rounded-lg bg-background shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute right-4 top-4 z-20 rounded-full bg-background/80 p-2 backdrop-blur-sm transition-colors hover:bg-background"
@@ -77,7 +73,6 @@ export function ImageModal({
         </button>
 
         <div className={`grid gap-6 p-6 ${hasMetadata ? 'md:grid-cols-[2fr_1fr]' : ''}`}>
-          {/* Image section */}
           <div className="relative">
             <div className={`relative overflow-hidden rounded-lg bg-muted ${hasMetadata ? 'aspect-square' : 'aspect-[4/3]'}`}>
               <Image
@@ -90,7 +85,6 @@ export function ImageModal({
               />
             </div>
 
-            {/* Image navigation */}
             {hasMultipleImages && (
               <div className="mt-4 flex items-center justify-between">
                 <button
@@ -113,7 +107,6 @@ export function ImageModal({
               </div>
             )}
 
-            {/* Thumbnails */}
             {hasMultipleImages && (
               <div className="mt-4 flex gap-2 overflow-x-auto">
                 {sketch.images.map((img, idx) => (
@@ -146,7 +139,6 @@ export function ImageModal({
             )}
           </div>
 
-          {/* Info section - only show if there's metadata */}
           {hasMetadata && (
             <div className="space-y-6">
               {sketch.title && (
