@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import type { DigitalArt, TraditionalArt } from '@/types/sketch';
-import { MasonryGrid } from '@/components/MasonryGrid';
-import { SketchCard } from '@/components/SketchCard';
-import { ImageModal } from '@/components/ImageModal';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import type { DigitalArt, TraditionalArt } from "@/types/sketch";
+import { MasonryGrid } from "@/components/MasonryGrid";
+import { SketchCard } from "@/components/SketchCard";
+import { ImageModal } from "@/components/ImageModal";
+import { cn } from "@/lib/utils";
 
-type TabType = 'digital' | 'traditional';
+type TabType = "digital" | "traditional";
 
 interface HomePageProps {
   digitalArt: DigitalArt[];
@@ -15,7 +15,7 @@ interface HomePageProps {
 }
 
 export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('digital');
+  const [activeTab, setActiveTab] = useState<TabType>("digital");
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     sketch: DigitalArt | TraditionalArt | null;
@@ -35,7 +35,10 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
   };
 
   const nextImage = () => {
-    if (modalState.sketch && modalState.imageIndex < modalState.sketch.images.length - 1) {
+    if (
+      modalState.sketch &&
+      modalState.imageIndex < modalState.sketch.images.length - 1
+    ) {
       setModalState((prev) => ({ ...prev, imageIndex: prev.imageIndex + 1 }));
     }
   };
@@ -46,7 +49,12 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
     }
   };
 
-  const currentSketches = activeTab === 'digital' ? digitalArt : traditionalArt;
+  const currentSketches = (
+    activeTab === "digital" ? digitalArt : traditionalArt
+  ).filter(
+    (sketch) =>
+      sketch.images && sketch.images.length > 0 && sketch.images[0]?.asset
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,31 +62,31 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
         <div className="mb-12 flex justify-center">
           <div className="inline-flex items-center gap-8 border-b-2 border-border">
             <button
-              onClick={() => setActiveTab('digital')}
+              onClick={() => setActiveTab("digital")}
               className={cn(
-                'relative pb-3 text-2xl font-bold transition-colors',
-                activeTab === 'digital'
-                  ? 'text-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                "relative pb-3 text-2xl font-bold transition-colors",
+                activeTab === "digital"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               Digital Art
-              {activeTab === 'digital' && (
+              {activeTab === "digital" && (
                 <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
               )}
             </button>
 
             <button
-              onClick={() => setActiveTab('traditional')}
+              onClick={() => setActiveTab("traditional")}
               className={cn(
-                'relative pb-3 text-2xl font-bold transition-colors',
-                activeTab === 'traditional'
-                  ? 'text-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                "relative pb-3 text-2xl font-bold transition-colors",
+                activeTab === "traditional"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               Traditional Art
-              {activeTab === 'traditional' && (
+              {activeTab === "traditional" && (
                 <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
               )}
             </button>
@@ -89,13 +97,18 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
           {currentSketches.length > 0 ? (
             <MasonryGrid>
               {currentSketches.map((sketch) => (
-                <SketchCard key={sketch._id} sketch={sketch} onClick={() => openModal(sketch)} />
+                <SketchCard
+                  key={sketch._id}
+                  sketch={sketch}
+                  onClick={() => openModal(sketch)}
+                />
               ))}
             </MasonryGrid>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-12 text-center">
               <p className="text-muted-foreground">
-                No {activeTab === 'digital' ? 'digital' : 'traditional'} art pieces yet
+                No {activeTab === "digital" ? "digital" : "traditional"} art
+                pieces yet
               </p>
             </div>
           )}

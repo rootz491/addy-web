@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import type { BaseSketch } from '@/types/sketch';
+import Image from "next/image";
+import type { BaseSketch } from "@/types/sketch";
 
 interface SketchCardProps {
   sketch: BaseSketch;
@@ -12,15 +12,20 @@ export function SketchCard({ sketch, onClick }: SketchCardProps) {
   const firstImage = sketch.images[0];
   const imageCount = sketch.images.length;
 
+  if (!firstImage || !firstImage.asset) {
+    console.log(sketch);
+    return null;
+  }
+
   return (
     <div
       onClick={onClick}
-      className="group relative break-inside-avoid cursor-pointer overflow-hidden rounded-lg bg-card transition-all hover:shadow-lg"
+      className="group relative cursor-pointer overflow-hidden rounded-lg bg-card transition-all hover:shadow-lg"
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
         <Image
           src={firstImage.asset.url}
-          alt={firstImage.alt || sketch.title || 'Sketch'}
+          alt={firstImage.alt || sketch.title || "Sketch"}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
