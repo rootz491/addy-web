@@ -1,12 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Instagram } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Instagram, Mail } from 'lucide-react';
 import contactData from '@/config/contact.json';
 
-// Reddit icon component
+// Reddit icon component (not in lucide-react by default)
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 24 24"
@@ -25,61 +22,51 @@ const getIcon = (iconName: string) => {
     case 'reddit':
       return RedditIcon;
     default:
-      return null;
+      return Mail;
   }
 };
 
-export function Navigation() {
-  const pathname = usePathname();
-
-  const links = [
-    { href: '/', label: 'Gallery' },
-    { href: '/about', label: 'About' },
-  ];
-
+export function Footer() {
   return (
-    <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="text-2xl font-bold tracking-tight">
-          Addy
-        </Link>
+    <footer className="border-t border-border bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          {/* Brand */}
+          <div className="text-center md:text-left">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} {contactData.name}. All rights reserved.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-6">
-          <div className="ml-2 flex items-center gap-3 border-r border-border pr-4">
+          {/* Social Links */}
+          <div className="flex items-center gap-4">
             {contactData.socials.map((social) => {
               const Icon = getIcon(social.icon);
-              if (!Icon) return null;
               return (
                 <a
                   key={social.name}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-primary"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"
                   aria-label={social.name}
                 >
                   <Icon className="h-5 w-5" />
                 </a>
               );
             })}
-          </div>
-
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'text-sm font-medium transition-colors hover:text-primary',
-                pathname === link.href
-                  ? 'text-foreground'
-                  : 'text-muted-foreground'
-              )}
+            
+            {/* Email */}
+            <a
+              href={`mailto:${contactData.email}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"
+              aria-label="Email"
             >
-              {link.label}
-            </Link>
-          ))}
+              <Mail className="h-5 w-5" />
+            </a>
+          </div>
         </div>
       </div>
-    </nav>
+    </footer>
   );
 }
