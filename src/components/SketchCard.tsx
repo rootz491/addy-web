@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { Tag, DollarSign } from 'lucide-react';
 import type { BaseSketch } from '@/types/sketch';
 
 interface SketchCardProps {
@@ -47,40 +46,6 @@ export function SketchCard({ sketch, onClick }: SketchCardProps) {
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
-
-      {/* Info section */}
-      {(sketch.title || sketch.categories || sketch.price) && (
-        <div className="space-y-2 p-3">
-          {sketch.title && (
-            <h3 className="line-clamp-2 font-semibold leading-tight">{sketch.title}</h3>
-          )}
-
-          <div className="space-y-1 text-xs text-muted-foreground">
-            {sketch.categories && sketch.categories.length > 0 && (
-              <div className="flex items-center gap-1">
-                <Tag className="h-3 w-3" />
-                <span className="line-clamp-1">{sketch.categories.join(', ')}</span>
-              </div>
-            )}
-
-            {sketch.orderable && sketch.price && sketch.currency && (
-              <div className="flex items-center gap-1 font-medium text-primary">
-                <DollarSign className="h-3 w-3" />
-                <span>
-                  {sketch.currency === 'USD' && '$'}
-                  {sketch.currency === 'EUR' && '€'}
-                  {sketch.currency === 'GBP' && '£'}
-                  {sketch.currency === 'JPY' && '¥'}
-                  {sketch.currency === 'INR' && '₹'}
-                  {!['USD', 'EUR', 'GBP', 'JPY', 'INR'].includes(sketch.currency) &&
-                    sketch.currency + ' '}
-                  {sketch.price.toLocaleString()}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

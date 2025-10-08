@@ -44,23 +44,11 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="border-b border-border bg-gradient-to-b from-muted/50 to-background py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-            Addy
-          </h1>
-        </div>
-      </section>
-
       <div className="container mx-auto space-y-16 px-4 py-12">
         {/* Digital Art Section */}
         <section>
           <div className="mb-8">
             <h2 className="mb-2 text-3xl font-bold">Digital Art</h2>
-            <p className="text-muted-foreground">
-              {digitalArt.length} {digitalArt.length === 1 ? 'piece' : 'pieces'}
-            </p>
           </div>
 
           {digitalArt.length > 0 ? (
@@ -80,9 +68,6 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
         <section>
           <div className="mb-8">
             <h2 className="mb-2 text-3xl font-bold">Traditional Art</h2>
-            <p className="text-muted-foreground">
-              {traditionalArt.length} {traditionalArt.length === 1 ? 'piece' : 'pieces'}
-            </p>
           </div>
 
           {traditionalArt.length > 0 ? (
