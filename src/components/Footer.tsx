@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Instagram, Mail } from 'lucide-react';
-import contactData from '@/config/contact.json';
+import { Instagram, Mail } from "lucide-react";
+import contactData from "@/config/contact.json";
 
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
@@ -16,9 +16,9 @@ const RedditIcon = ({ className }: { className?: string }) => (
 
 const getIcon = (iconName: string) => {
   switch (iconName) {
-    case 'instagram':
+    case "instagram":
       return Instagram;
-    case 'reddit':
+    case "reddit":
       return RedditIcon;
     default:
       return Mail;
@@ -32,7 +32,19 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="text-center md:text-left">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} {contactData.name}. All rights reserved.
+              © {new Date().getFullYear()} {contactData.name}. All rights
+              reserved.
+            </p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
+              Developed by{" "}
+              <a
+                href="https://rootz491.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors underline"
+              >
+                rootz491
+              </a>
             </p>
           </div>
 
@@ -52,7 +64,7 @@ export function Footer() {
                 </a>
               );
             })}
-            
+
             <a
               href={`mailto:${contactData.email}`}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"
