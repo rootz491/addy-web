@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { X, Calendar, Tag, DollarSign } from 'lucide-react';
-import Image from 'next/image';
-import { useEffect } from 'react';
-import type { BaseSketch } from '@/types/sketch';
+import { X, Calendar, Tag, DollarSign } from "lucide-react";
+import Image from "next/image";
+import { useEffect } from "react";
+import type { BaseSketch } from "@/types/sketch";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -24,19 +24,19 @@ export function ImageModal({
 }: ImageModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') onNextImage();
-      if (e.key === 'ArrowLeft') onPrevImage();
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") onNextImage();
+      if (e.key === "ArrowLeft") onPrevImage();
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose, onNextImage, onPrevImage]);
 
@@ -72,21 +72,29 @@ export function ImageModal({
           <X className="h-6 w-6" />
         </button>
 
-        <div className={`grid gap-6 p-6 ${hasMetadata ? 'md:grid-cols-[2fr_1fr]' : ''}`}>
+        <div
+          className={`grid gap-4 py-4 md:gap-6 md:p-6 ${hasMetadata ? "md:grid-cols-[2fr_1fr]" : ""}`}
+        >
           <div className="relative">
-            <div className={`relative overflow-hidden rounded-lg bg-muted ${hasMetadata ? 'aspect-square' : 'aspect-[4/3]'}`}>
+            <div
+              className={`relative overflow-hidden bg-muted md:rounded-lg ${hasMetadata ? "aspect-square" : "aspect-square md:aspect-[4/3]"}`}
+            >
               <Image
                 src={currentImage.asset.url}
-                alt={currentImage.alt || sketch.title || 'Sketch'}
+                alt={currentImage.alt || sketch.title || "Sketch"}
                 fill
                 className="object-contain"
-                sizes={hasMetadata ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 100vw, 90vw'}
+                sizes={
+                  hasMetadata
+                    ? "(max-width: 768px) 100vw, 66vw"
+                    : "(max-width: 768px) 100vw, 90vw"
+                }
                 priority
               />
             </div>
 
             {hasMultipleImages && (
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mx-4 mt-4 flex items-center justify-between md:mx-0">
                 <button
                   onClick={onPrevImage}
                   disabled={currentImageIndex === 0}
@@ -108,7 +116,7 @@ export function ImageModal({
             )}
 
             {hasMultipleImages && (
-              <div className="mt-4 flex gap-2 overflow-x-auto">
+              <div className="mx-4 mt-4 flex gap-2 overflow-x-auto md:mx-0">
                 {sketch.images.map((img, idx) => (
                   <button
                     key={img.asset._id}
@@ -122,8 +130,8 @@ export function ImageModal({
                     }}
                     className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all ${
                       idx === currentImageIndex
-                        ? 'border-primary'
-                        : 'border-transparent opacity-60 hover:opacity-100'
+                        ? "border-primary"
+                        : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
                     <Image
@@ -140,7 +148,7 @@ export function ImageModal({
           </div>
 
           {hasMetadata && (
-            <div className="space-y-6">
+            <div className="space-y-6 px-4 pb-4 md:px-0 md:pb-0">
               {sketch.title && (
                 <div>
                   <h2 className="text-3xl font-bold">{sketch.title}</h2>
@@ -165,11 +173,14 @@ export function ImageModal({
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span className="font-medium">Created:</span>
                     <span className="text-muted-foreground">
-                      {new Date(sketch.dateOfCreation).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {new Date(sketch.dateOfCreation).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
                     </span>
                   </div>
                 )}
@@ -202,13 +213,14 @@ export function ImageModal({
                           Available for purchase
                         </p>
                         <p className="text-2xl font-bold">
-                          {sketch.currency === 'USD' && '$'}
-                          {sketch.currency === 'EUR' && '€'}
-                          {sketch.currency === 'GBP' && '£'}
-                          {sketch.currency === 'JPY' && '¥'}
-                          {sketch.currency === 'INR' && '₹'}
-                          {!['USD', 'EUR', 'GBP', 'JPY', 'INR'].includes(sketch.currency || '') &&
-                            sketch.currency + ' '}
+                          {sketch.currency === "USD" && "$"}
+                          {sketch.currency === "EUR" && "€"}
+                          {sketch.currency === "GBP" && "£"}
+                          {sketch.currency === "JPY" && "¥"}
+                          {sketch.currency === "INR" && "₹"}
+                          {!["USD", "EUR", "GBP", "JPY", "INR"].includes(
+                            sketch.currency || ""
+                          ) && sketch.currency + " "}
                           {sketch.price.toLocaleString()}
                         </p>
                       </div>
