@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Mail, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 export function ContactForm() {
   const [formData, setFormData] = useState({

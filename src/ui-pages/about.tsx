@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { Instagram, Mail } from 'lucide-react';
-import contactData from '@/config/contact.json';
-import { ContactForm } from '@/components/ContactForm';
+import Image from "next/image";
+import { Instagram, Mail } from "lucide-react";
+import contactData from "@/config/contact.json";
+import { ContactForm } from "@/components/ContactForm";
 
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
@@ -18,9 +18,9 @@ const RedditIcon = ({ className }: { className?: string }) => (
 
 const getIcon = (iconName: string) => {
   switch (iconName) {
-    case 'instagram':
+    case "instagram":
       return Instagram;
-    case 'reddit':
+    case "reddit":
       return RedditIcon;
     default:
       return Mail;
@@ -54,7 +54,7 @@ export function AboutPage({ artistImage }: AboutPageProps) {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-muted to-secondary/20" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-        
+
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
             <h1 className="mb-4 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
@@ -72,27 +72,29 @@ export function AboutPage({ artistImage }: AboutPageProps) {
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">Welcome</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              I&apos;m a hobbyist artist passionate about both digital and traditional art. 
-              With a background in computer applications, I blend technical precision with 
-              creative expression to bring imagination to life.
+              I&apos;m a hobbyist artist passionate about both digital and
+              traditional art. With a background in computer applications, I
+              blend technical precision with creative expression to bring
+              imagination to life.
             </p>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">Inspiration</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              My work draws deep inspiration from anime and Japanese culture. I strive to 
-              capture the dynamic energy, emotion, and visual poetry that make these art 
-              forms so captivating.
+              My work draws deep inspiration from anime and Japanese culture. I
+              strive to capture the dynamic energy, emotion, and visual poetry
+              that make these art forms so captivating.
             </p>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">Philosophy</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              For me, art is about passion, exploration, and the joy of creation. As a 
-              hobbyist, I have the freedom to experiment and grow, staying true to my 
-              vision while continuously developing my craft.
+              For me, art is about passion, exploration, and the joy of
+              creation. As a hobbyist, I have the freedom to experiment and
+              grow, staying true to my vision while continuously developing my
+              craft.
             </p>
           </div>
 
@@ -114,7 +116,7 @@ export function AboutPage({ artistImage }: AboutPageProps) {
                   </a>
                 );
               })}
-              
+
               <a
                 href={`mailto:${contactData.email}`}
                 className="flex items-center gap-3 rounded-lg bg-background px-4 py-3 transition-colors hover:bg-primary hover:text-primary-foreground"
