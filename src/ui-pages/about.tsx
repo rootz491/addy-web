@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Instagram, Mail } from 'lucide-react';
 import contactData from '@/config/contact.json';
+import { ContactForm } from '@/components/ContactForm';
 
 const RedditIcon = ({ className }: { className?: string }) => (
   <svg
@@ -69,81 +70,34 @@ export function AboutPage({ artistImage }: AboutPageProps) {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold">Welcome to My Creative World</h2>
+            <h2 className="text-3xl font-bold">Welcome</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              I&apos;m a hobbyist artist with a passion for bringing imagination to life through both
-              digital and traditional art. While my professional background lies in computer
-              applications, where I earned my degree, my heart has always been drawn to the
-              world of visual storytelling and artistic expression.
+              I&apos;m a hobbyist artist passionate about both digital and traditional art. 
+              With a background in computer applications, I blend technical precision with 
+              creative expression to bring imagination to life.
             </p>
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold">The Journey</h2>
+            <h2 className="text-3xl font-bold">Inspiration</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Art has been my companion on the side of my technical career—a way to balance the
-              logical world of technology with the boundless freedom of creativity. Each sketch,
-              whether crafted digitally on a tablet or with traditional pencils and brushes,
-              represents a moment of escape and exploration.
-            </p>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              My dual background in technology and art allows me to approach creation from
-              unique perspectives, blending technical precision with artistic expression. This
-              intersection of disciplines continually inspires my work and pushes me to
-              experiment with new techniques and styles.
+              My work draws deep inspiration from anime and Japanese culture. I strive to 
+              capture the dynamic energy, emotion, and visual poetry that make these art 
+              forms so captivating.
             </p>
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold">Inspirations & Style</h2>
+            <h2 className="text-3xl font-bold">Philosophy</h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              I draw deep inspiration from anime and Japanese culture, which profoundly
-              influences my artistic style. The elegance of Japanese aesthetics, the dynamic
-              energy of anime storytelling, and the rich cultural heritage of Japan all find
-              their way into my work. From character designs to landscape compositions, these
-              influences help shape my unique artistic voice.
-            </p>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              Whether I&apos;m creating detailed character illustrations, atmospheric scenes, or
-              experimental pieces, I strive to capture the essence of what makes Japanese art
-              and anime so captivating—the perfect balance of emotion, movement, and visual
-              poetry.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold">My Artistic Philosophy</h2>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              For me, art is not about perfection—it&apos;s about passion, exploration, and the joy
-              of creation. Every piece tells a story, captures a feeling, or explores an idea
-              that resonates with me. I believe that art should be accessible and personal,
-              which is why I work across both digital and traditional mediums, each offering
-              its own unique possibilities and challenges.
-            </p>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              As a hobbyist, I have the freedom to experiment, make mistakes, and grow without
-              the pressure of commercial constraints. This allows me to stay true to my vision
-              and continuously develop my craft on my own terms.
-            </p>
-          </div>
-
-          <div className="space-y-4 border-t border-border pt-8">
-            <h2 className="text-3xl font-bold">Thank You for Visiting</h2>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              Thank you for taking the time to explore my work. Each piece in my gallery
-              represents hours of dedication, learning, and love for the craft. I hope my art
-              resonates with you and perhaps inspires your own creative journey. Feel free to
-              browse through my collections of digital and traditional art, and don&apos;t hesitate
-              to reach out if you&apos;d like to connect or discuss potential collaborations.
+              For me, art is about passion, exploration, and the joy of creation. As a 
+              hobbyist, I have the freedom to experiment and grow, staying true to my 
+              vision while continuously developing my craft.
             </p>
           </div>
 
           <div className="space-y-6 rounded-lg border border-border bg-muted/50 p-8">
-            <h2 className="text-3xl font-bold">Get in Touch</h2>
-            <p className="text-lg text-muted-foreground">
-              Feel free to reach out through any of these platforms. I&apos;d love to hear from you!
-            </p>
-            
+            <h2 className="text-3xl font-bold">Connect</h2>
             <div className="flex flex-wrap items-center gap-4">
               {contactData.socials.map((social) => {
                 const Icon = getIcon(social.icon);
@@ -169,13 +123,9 @@ export function AboutPage({ artistImage }: AboutPageProps) {
                 <span className="font-medium">Email</span>
               </a>
             </div>
-            
-            <div className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                Email: <a href={`mailto:${contactData.email}`} className="text-foreground hover:underline">{contactData.email}</a>
-              </p>
-            </div>
           </div>
+
+          <ContactForm />
         </div>
       </section>
     </div>
