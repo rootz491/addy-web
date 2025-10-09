@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       to: process.env.EMAIL_TO,
       subject: `Contact Form: ${subject}`,
       html: `
-        <h2>New Contact Form Submission</h2>
+        <h4>Contact Form Submission from addy.rootz491.com</h4>
         <p><strong>From:</strong> ${email}</p>
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong></p>
