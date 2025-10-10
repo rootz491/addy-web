@@ -1,20 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { DigitalArt, TraditionalArt } from "@/types/sketch";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { SketchCard } from "@/components/SketchCard";
 import { ImageModal } from "@/components/ImageModal";
 import { cn } from "@/lib/utils";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { client } from "@/sanity/lib/client";
+import {
+  DIGITAL_ART_PAGINATED_QUERY,
+  TRADITIONAL_ART_PAGINATED_QUERY,
+  DIGITAL_ART_COUNT_QUERY,
+  TRADITIONAL_ART_COUNT_QUERY,
+} from "@/sanity/lib/queries";
 
 type TabType = "digital" | "traditional";
 
 interface HomePageProps {
-  digitalArt: DigitalArt[];
-  traditionalArt: TraditionalArt[];
+  initialDigitalArt: DigitalArt[];
+  initialTraditionalArt: TraditionalArt[];
 }
 
-export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
+interface PaginationState {
+  digital: {
+    items: DigitalArt[];
+    page: number;
+    hasMore: boolean;
+    isLoading: boolean;
+    total: number;
+  };
+  traditional: {
+    items: TraditionalArt[];
+    page: number;
+    hasMore: boolean;
+    isLoading: boolean;
+    total: number;
+  };
+}
+
+const ITEMS_PER_PAGE = 12;
+
+export function HomePage({
+  initialDigitalArt,
+  initialTraditionalArt,
+}: HomePageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("digital");
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
@@ -24,6 +54,106 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
     isOpen: false,
     sketch: null,
     imageIndex: 0,
+  });
+
+  const [paginationState, setPaginationState] = useState<PaginationState>({
+    digital: {
+      items: initialDigitalArt,
+      page: 0,
+      hasMore: initialDigitalArt.length === ITEMS_PER_PAGE,
+      isLoading: false,
+      total: 0,
+    },
+    traditional: {
+      items: initialTraditionalArt,
+      page: 0,
+      hasMore: initialTraditionalArt.length === ITEMS_PER_PAGE,
+      isLoading: false,
+      total: 0,
+    },
+  });
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const [digitalCount, traditionalCount] = await Promise.all([
+        client.fetch(DIGITAL_ART_COUNT_QUERY),
+        client.fetch(TRADITIONAL_ART_COUNT_QUERY),
+      ]);
+
+      setPaginationState((prev) => ({
+        ...prev,
+        digital: {
+          ...prev.digital,
+          total: digitalCount,
+          hasMore: prev.digital.items.length < digitalCount,
+        },
+        traditional: {
+          ...prev.traditional,
+          total: traditionalCount,
+          hasMore: prev.traditional.items.length < traditionalCount,
+        },
+      }));
+    };
+
+    fetchCounts();
+  }, [initialDigitalArt.length, initialTraditionalArt.length]);
+
+  const loadMoreItems = useCallback(async () => {
+    const currentState = paginationState[activeTab];
+    if (currentState.isLoading || !currentState.hasMore) return;
+
+    setPaginationState((prev) => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        isLoading: true,
+      },
+    }));
+
+    try {
+      const nextPage = currentState.page + 1;
+      const start = nextPage * ITEMS_PER_PAGE;
+
+      const query =
+        activeTab === "digital"
+          ? DIGITAL_ART_PAGINATED_QUERY
+          : TRADITIONAL_ART_PAGINATED_QUERY;
+
+      const newItems = await client.fetch(query, {
+        start,
+        limit: ITEMS_PER_PAGE,
+      });
+
+      setPaginationState((prev) => ({
+        ...prev,
+        [activeTab]: {
+          ...prev[activeTab],
+          items: [...prev[activeTab].items, ...newItems],
+          page: nextPage,
+          hasMore:
+            newItems.length === ITEMS_PER_PAGE &&
+            prev[activeTab].items.length + newItems.length <
+              prev[activeTab].total,
+          isLoading: false,
+        },
+      }));
+    } catch {
+      setPaginationState((prev) => ({
+        ...prev,
+        [activeTab]: {
+          ...prev[activeTab],
+          isLoading: false,
+        },
+      }));
+    }
+  }, [activeTab, paginationState]);
+
+  const currentState = paginationState[activeTab];
+
+  useInfiniteScroll({
+    hasNextPage: currentState.hasMore,
+    isLoading: currentState.isLoading,
+    onLoadMore: loadMoreItems,
   });
 
   const openModal = (sketch: DigitalArt | TraditionalArt, imageIndex = 0) => {
@@ -49,10 +179,8 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
     }
   };
 
-  const currentSketches = (
-    activeTab === "digital" ? digitalArt : traditionalArt
-  ).filter(
-    (sketch) =>
+  const currentSketches = currentState.items.filter(
+    (sketch: DigitalArt | TraditionalArt) =>
       sketch.images && sketch.images.length > 0 && sketch.images[0]?.asset
   );
 
@@ -95,15 +223,22 @@ export function HomePage({ digitalArt, traditionalArt }: HomePageProps) {
 
         <section>
           {currentSketches.length > 0 ? (
-            <MasonryGrid>
-              {currentSketches.map((sketch) => (
-                <SketchCard
-                  key={sketch._id}
-                  sketch={sketch}
-                  onClick={() => openModal(sketch)}
-                />
-              ))}
-            </MasonryGrid>
+            <>
+              <MasonryGrid>
+                {currentSketches.map((sketch) => (
+                  <SketchCard
+                    key={sketch._id}
+                    sketch={sketch}
+                    onClick={() => openModal(sketch)}
+                  />
+                ))}
+              </MasonryGrid>
+              {currentState.isLoading && (
+                <div className="mt-8 flex justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-foreground border-t-transparent"></div>
+                </div>
+              )}
+            </>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-12 text-center">
               <p className="text-muted-foreground">

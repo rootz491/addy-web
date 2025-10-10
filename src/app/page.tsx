@@ -1,5 +1,8 @@
 import { client } from "@/sanity/lib/client";
-import { DIGITAL_ART_QUERY, TRADITIONAL_ART_QUERY } from "@/sanity/lib/queries";
+import {
+  DIGITAL_ART_PAGINATED_QUERY,
+  TRADITIONAL_ART_PAGINATED_QUERY,
+} from "@/sanity/lib/queries";
 import type { DigitalArt, TraditionalArt } from "@/types/sketch";
 import { HomePage } from "@/ui-pages/home";
 import type { Metadata } from "next";
@@ -10,13 +13,26 @@ export const metadata: Metadata = {
     "Browse my collection of digital and traditional art, inspired by anime and Japanese culture.",
 };
 
+const ITEMS_PER_PAGE = 12;
+
 export default async function Page() {
-  const [digitalArt, traditionalArt] = await Promise.all([
-    client.fetch<DigitalArt[]>(DIGITAL_ART_QUERY),
-    client.fetch<TraditionalArt[]>(TRADITIONAL_ART_QUERY),
+  const [initialDigitalArt, initialTraditionalArt] = await Promise.all([
+    client.fetch<DigitalArt[]>(DIGITAL_ART_PAGINATED_QUERY, {
+      start: 0,
+      limit: ITEMS_PER_PAGE,
+    }),
+    client.fetch<TraditionalArt[]>(TRADITIONAL_ART_PAGINATED_QUERY, {
+      start: 0,
+      limit: ITEMS_PER_PAGE,
+    }),
   ]);
 
-  return <HomePage digitalArt={digitalArt} traditionalArt={traditionalArt} />;
+  return (
+    <HomePage
+      initialDigitalArt={initialDigitalArt}
+      initialTraditionalArt={initialTraditionalArt}
+    />
+  );
 }
 
-export const revalidate = 60; // fallback ISR revalidation
+export const revalidate = 60;
