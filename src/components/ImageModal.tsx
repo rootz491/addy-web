@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { X, Calendar, Tag, DollarSign } from "lucide-react";
 import Image from "next/image";
 import { useEffect } from "react";
@@ -22,6 +23,9 @@ export function ImageModal({
   onNextImage,
   onPrevImage,
 }: ImageModalProps) {
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -57,6 +61,30 @@ export function ImageModal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
+      onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
+        if (e.touches.length === 1) {
+          touchStartX.current = e.touches[0].clientX;
+        }
+      }}
+      onTouchMove={(e: React.TouchEvent<HTMLDivElement>) => {
+        if (e.touches.length === 1) {
+          touchEndX.current = e.touches[0].clientX;
+        }
+      }}
+      onTouchEnd={() => {
+        if (touchStartX.current !== null && touchEndX.current !== null) {
+          const diff = touchStartX.current - touchEndX.current;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              onNextImage(); // swipe left
+            } else {
+              onPrevImage(); // swipe right
+            }
+          }
+        }
+        touchStartX.current = null;
+        touchEndX.current = null;
+      }}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
 
