@@ -5,6 +5,7 @@ import type { DigitalArt, TraditionalArt, MangaPanel } from "@/types/sketch";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { SketchCard } from "@/components/SketchCard";
 import { ImageModal } from "@/components/ImageModal";
+import { MangaPanelModal } from "@/components/MangaPanelModal";
 import { cn } from "@/lib/utils";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { client } from "@/sanity/lib/client";
@@ -217,6 +218,8 @@ export function HomePage({
       sketch.images && sketch.images.length > 0 && sketch.images[0]?.asset
   );
 
+  console.log(currentSketches);
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
@@ -303,7 +306,13 @@ export function HomePage({
         </section>
       </div>
 
-      {modalState.sketch && (
+      {modalState.sketch && modalState.sketch._type === "mangaPanel" ? (
+        <MangaPanelModal
+          isOpen={modalState.isOpen}
+          onClose={closeModal}
+          sketch={modalState.sketch}
+        />
+      ) : modalState.sketch ? (
         <ImageModal
           isOpen={modalState.isOpen}
           onClose={closeModal}
@@ -312,7 +321,7 @@ export function HomePage({
           onNextImage={nextImage}
           onPrevImage={prevImage}
         />
-      )}
+      ) : null}
     </div>
   );
 }

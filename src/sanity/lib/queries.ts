@@ -3,6 +3,7 @@ import { groq } from "next-sanity";
 export const DIGITAL_ART_QUERY = groq`
   *[_type == "digitalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) {
     _id,
+    _type,
     title,
     description,
     featured,
@@ -31,6 +32,7 @@ export const DIGITAL_ART_QUERY = groq`
 export const TRADITIONAL_ART_QUERY = groq`
   *[_type == "traditionalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) {
     _id,
+    _type,
     title,
     description,
     featured,
@@ -59,6 +61,7 @@ export const TRADITIONAL_ART_QUERY = groq`
 export const DIGITAL_ART_PAGINATED_QUERY = groq`
   *[_type == "digitalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) [$start...($start + $limit)] {
     _id,
+    _type,
     title,
     description,
     featured,
@@ -87,6 +90,7 @@ export const DIGITAL_ART_PAGINATED_QUERY = groq`
 export const TRADITIONAL_ART_PAGINATED_QUERY = groq`
   *[_type == "traditionalArt"] | order(featured desc, dateOfCreation desc, _createdAt desc) [$start...($start + $limit)] {
     _id,
+    _type,
     title,
     description,
     featured,
@@ -118,6 +122,7 @@ export const TRADITIONAL_ART_COUNT_QUERY = groq`count(*[_type == "traditionalArt
 export const MANGA_PANEL_PAGINATED_QUERY = groq`
   *[_type == "mangaPanel"] | order(_createdAt desc) [$start...($start + $limit)] {
     _id,
+    _type,
     images[] {
       asset-> {
         _id,
