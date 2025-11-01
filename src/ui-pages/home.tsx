@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { DigitalArt, TraditionalArt } from "@/types/sketch";
+import type { DigitalArt, TraditionalArt, MangaPanel } from "@/types/sketch";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { SketchCard } from "@/components/SketchCard";
 import { ImageModal } from "@/components/ImageModal";
@@ -11,15 +11,18 @@ import { client } from "@/sanity/lib/client";
 import {
   DIGITAL_ART_PAGINATED_QUERY,
   TRADITIONAL_ART_PAGINATED_QUERY,
+  MANGA_PANEL_PAGINATED_QUERY,
   DIGITAL_ART_COUNT_QUERY,
   TRADITIONAL_ART_COUNT_QUERY,
+  MANGA_PANEL_COUNT_QUERY,
 } from "@/sanity/lib/queries";
 
-type TabType = "digital" | "traditional";
+type TabType = "digital" | "traditional" | "manga";
 
 interface HomePageProps {
   initialDigitalArt: DigitalArt[];
   initialTraditionalArt: TraditionalArt[];
+  initialMangaPanels: MangaPanel[];
 }
 
 interface PaginationState {
@@ -37,6 +40,13 @@ interface PaginationState {
     isLoading: boolean;
     total: number;
   };
+  manga: {
+    items: MangaPanel[];
+    page: number;
+    hasMore: boolean;
+    isLoading: boolean;
+    total: number;
+  };
 }
 
 const ITEMS_PER_PAGE = 12;
@@ -44,11 +54,12 @@ const ITEMS_PER_PAGE = 12;
 export function HomePage({
   initialDigitalArt,
   initialTraditionalArt,
+  initialMangaPanels,
 }: HomePageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("digital");
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
-    sketch: DigitalArt | TraditionalArt | null;
+    sketch: DigitalArt | TraditionalArt | MangaPanel | null;
     imageIndex: number;
   }>({
     isOpen: false,
@@ -71,13 +82,21 @@ export function HomePage({
       isLoading: false,
       total: 0,
     },
+    manga: {
+      items: initialMangaPanels,
+      page: 0,
+      hasMore: initialMangaPanels.length === ITEMS_PER_PAGE,
+      isLoading: false,
+      total: 0,
+    },
   });
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const [digitalCount, traditionalCount] = await Promise.all([
+      const [digitalCount, traditionalCount, mangaCount] = await Promise.all([
         client.fetch(DIGITAL_ART_COUNT_QUERY),
         client.fetch(TRADITIONAL_ART_COUNT_QUERY),
+        client.fetch(MANGA_PANEL_COUNT_QUERY),
       ]);
 
       setPaginationState((prev) => ({
@@ -92,11 +111,20 @@ export function HomePage({
           total: traditionalCount,
           hasMore: prev.traditional.items.length < traditionalCount,
         },
+        manga: {
+          ...prev.manga,
+          total: mangaCount,
+          hasMore: prev.manga.items.length < mangaCount,
+        },
       }));
     };
 
     fetchCounts();
-  }, [initialDigitalArt.length, initialTraditionalArt.length]);
+  }, [
+    initialDigitalArt.length,
+    initialTraditionalArt.length,
+    initialMangaPanels.length,
+  ]);
 
   const loadMoreItems = useCallback(async () => {
     const currentState = paginationState[activeTab];
@@ -117,7 +145,9 @@ export function HomePage({
       const query =
         activeTab === "digital"
           ? DIGITAL_ART_PAGINATED_QUERY
-          : TRADITIONAL_ART_PAGINATED_QUERY;
+          : activeTab === "traditional"
+            ? TRADITIONAL_ART_PAGINATED_QUERY
+            : MANGA_PANEL_PAGINATED_QUERY;
 
       const newItems = await client.fetch(query, {
         start,
@@ -156,7 +186,10 @@ export function HomePage({
     onLoadMore: loadMoreItems,
   });
 
-  const openModal = (sketch: DigitalArt | TraditionalArt, imageIndex = 0) => {
+  const openModal = (
+    sketch: DigitalArt | TraditionalArt | MangaPanel,
+    imageIndex = 0
+  ) => {
     setModalState({ isOpen: true, sketch, imageIndex });
   };
 
@@ -180,7 +213,7 @@ export function HomePage({
   };
 
   const currentSketches = currentState.items.filter(
-    (sketch: DigitalArt | TraditionalArt) =>
+    (sketch: DigitalArt | TraditionalArt | MangaPanel) =>
       sketch.images && sketch.images.length > 0 && sketch.images[0]?.asset
   );
 
@@ -218,6 +251,21 @@ export function HomePage({
                 <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
               )}
             </button>
+
+            <button
+              onClick={() => setActiveTab("manga")}
+              className={cn(
+                "relative pb-3 text-2xl font-bold transition-colors",
+                activeTab === "manga"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Manga Panels
+              {activeTab === "manga" && (
+                <span className="absolute bottom-0 left-0 right-0 h-1 bg-foreground" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -242,8 +290,13 @@ export function HomePage({
           ) : (
             <div className="rounded-lg border border-dashed border-border p-12 text-center">
               <p className="text-muted-foreground">
-                No {activeTab === "digital" ? "digital" : "traditional"} art
-                pieces yet
+                No{" "}
+                {activeTab === "digital"
+                  ? "digital"
+                  : activeTab === "traditional"
+                    ? "traditional"
+                    : "manga"}{" "}
+                art pieces yet
               </p>
             </div>
           )}

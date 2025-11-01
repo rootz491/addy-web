@@ -29,11 +29,15 @@ export interface BaseSketch {
 }
 
 export interface DigitalArt extends BaseSketch {
-  _type: 'digitalArt';
+  _type: "digitalArt";
 }
 
 export interface TraditionalArt extends BaseSketch {
-  _type: 'traditionalArt';
+  _type: "traditionalArt";
 }
 
-export type Sketch = DigitalArt | TraditionalArt;
+export interface MangaPanel extends BaseSketch {
+  _type: "mangaPanel";
+}
+
+export type Sketch = DigitalArt | TraditionalArt | MangaPanel;

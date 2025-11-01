@@ -114,3 +114,26 @@ export const TRADITIONAL_ART_PAGINATED_QUERY = groq`
 
 export const DIGITAL_ART_COUNT_QUERY = groq`count(*[_type == "digitalArt"])`;
 export const TRADITIONAL_ART_COUNT_QUERY = groq`count(*[_type == "traditionalArt"])`;
+
+export const MANGA_PANEL_PAGINATED_QUERY = groq`
+  *[_type == "mangaPanel"] | order(_createdAt desc) [$start...($start + $limit)] {
+    _id,
+    title,
+    images[] {
+      asset-> {
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions {
+            width,
+            height
+          }
+        }
+      },
+      alt
+    }
+  }
+`;
+
+export const MANGA_PANEL_COUNT_QUERY = groq`count(*[_type == "mangaPanel"])`;
