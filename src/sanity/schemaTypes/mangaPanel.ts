@@ -6,12 +6,6 @@ export const mangaPanel = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "images",
       title: "Images",
       type: "array",
@@ -35,8 +29,13 @@ export const mangaPanel = defineType({
   ],
   preview: {
     select: {
-      title: "title",
       media: "images.0",
+    },
+    prepare({ media }) {
+      return {
+        title: "Manga Panel",
+        media,
+      };
     },
   },
 });
